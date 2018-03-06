@@ -1,0 +1,62 @@
+body{
+    text-align: center;
+    background-color: #C6535F;
+}
+
+.container{
+    max-width: 960px;
+}
+
+/* Header */
+.header{
+    margin: 20px 0;
+
+}
+#title-pic{
+    width: 100%;
+    max-width: 600px;
+}
+/* Text Display */
+.text-display{
+    margin: 20px 0;
+}
+
+/* Players */
+.players{
+    margin: 20px 0;
+}
+.player-1{
+    border-radius: 200px;
+}
+.result{
+    border-radius: 3px;
+}
+.player-2{
+    border-radius: 200px;    
+}
+.boxes{
+    height: 300px;
+    border: black 1px solid;
+    float: left;
+}
+
+/* Chat */
+.chat-box{
+    width: 100%;
+    height: 200px;
+    border: 1px black solid;
+    margin: 20px 0;
+    background-color: antiquewhite;
+    border-radius: 5px;
+}
+.chat-input{
+    border-radius: 5px;
+    width: 92%;
+    background-color: antiquewhite;
+    
+}
+.chat-submit{
+    border-radius: 10px;
+    background-color: antiquewhite;
+    
+}

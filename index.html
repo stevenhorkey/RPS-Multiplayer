@@ -13,20 +13,63 @@
     <link href="https://cdn.rawgit.com/michalsnik/aos/2.1.1/dist/aos.css" rel="stylesheet">
     <!-- JQuery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <!-- Firebase Reference -->
+    <script src="https://www.gstatic.com/firebasejs/4.10.1/firebase.js"></script>
     <!-- Javascript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.bundle.min.js" integrity="sha384-feJI7QwhOS+hwpX2zkaeJQjeiwlhOP+SdQDqhgvvo1DsjtiSQByFdThsxO669S2D" crossorigin="anonymous"></script>
     <script src="assets/javascript/site.js"></script>
     <!-- Firebase -->
-    <script src="https://www.gstatic.com/firebasejs/4.10.1/firebase.js"></script>
 </head>
 <body>
-    <section class="row">
+    <div class="row header">
         <div class="container">
             <div>
-                <h1>Rock Paper Scissors</h1>
+                <!-- <h1>Rock Paper Scissors</h1> -->
+                <img id="title-pic" src="http://static1.squarespace.com/static/595543f6b11be1695b0fdb29/t/59555414cd0f68572370bb64/1498764324553/DFP-RockPaperScissors-Black.png?format=1000w">
             </div>
         </div>
-    </section>
+    </div>
+
+    <div class="text-display row">
+        <div class="container">
+            <input type="text" id="name-input">
+            <button id="name-submit" class="btn btn-standard">Submit</button>
+            <div class="announcment">Testing</div>
+            <div class="whos-turn">Your turn</div>
+        </div>
+    </div>
+
+    <div class="players row">
+        <div class="container">
+            <div class="boxes player-1 col-md-4">
+                <div class="name">Waiting for Player One</div>
+                <div class="rock"></div>
+                <div class="paper"></div>
+                <div class="scissors"></div>
+                <div class="win-loss"></div>
+            </div>
+            <div class="boxes result col-md-4">
+
+            </div>
+            <div class="boxes player-2 col-md-4">
+                <div class="name">Waiting for Player Two</div>
+                <div class="rock"></div>
+                <div class="paper"></div>
+                <div class="scissors"></div>
+                <div class="win-loss"></div>
+            </div>
+        </div>
+    </div>
+
+    <divc class="row chat">
+        <div class="container">
+            <div>
+                <div class="chat-box"></div>
+                <input class="chat-input" type="text" placeholder="Message">
+                <button class="chat-submit btn btn-standard" >Submit</button>
+            </div>
+        </div>
+    </div>
     
 </body>
 </html>
