@@ -1,6 +1,10 @@
 body{
     text-align: center;
-    background-color: rgb(160, 230, 96);
+    background: linear-gradient(rgba(255, 255, 255, 0.459),rgba(255, 255, 255, 0.5)), url('../images/rps.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    min-height: 100vh;
 }
 
 .container{
@@ -54,18 +58,19 @@ body{
     height: 200px;
     border: 1px black solid;
     margin: 20px 0;
-    background-color: antiquewhite;
+    background-color: white;
     border-radius: 5px;
     overflow-y: scroll;
 }
 .chat-input{
     border-radius: 5px;
-    width: 92%;
-    background-color: antiquewhite;
+    width: 90%;
+    background-color: white;
     
 }
 .chat-submit{
     border-radius: 10px;
-    background-color: antiquewhite;
+    background-color: white;
+    height: 10px;
     
 }

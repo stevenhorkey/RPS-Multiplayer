@@ -10,43 +10,44 @@ var config = {
 firebase.initializeApp(config);
 
 var database = firebase.database();
-
-var name1 = "";
-var wins1 = 0;
-var losses1 = 0;
-
-var name2 = "";
-var wins2 = 0;
-var losses2 = 0;
-
-var turn;
-
+          
 var game = {
+  variables : {
+    name1 : "",
+    wins1 : 0,
+    losses1 : 0,
+    name2 : "",
+    wins2 : 0,
+    losses2 : 0,
+    choice1 : "",
+    choice2 : "",
+  },
   functions : {
     init: function(){
-
       $('#name-submit').on("click", function() {
         var name = $('#name-input').val().trim();    
-        if (name1 === ""){
-          name1 = name;
+        if (game.variables.name1 === ""){
+          game.variables.name1 = name;
+          $('#name-input').hide();
+          $('#name-submit').hide();
           database.ref().set({
             chat: "",
             players: {
               one : {
-                name:name1,
+                name:game.variables.name1,
                 choice: '',                
                 wins:0,
                 losses:0
               }
             },
           });
-        } else if (name2 === "") {
-          name2 = name;
+        } else if (game.variables.name2 === "") {
+          game.variables.name2 = name;
           $('#name-input').hide();
           $('#name-submit').hide();
           database.ref('players').update({
               two : {
-                name:name2,
+                name:game.variables.name2,
                 choice: '',
                 wins:0,
                 losses:0
@@ -60,66 +61,174 @@ var game = {
         $('#name-input').val("");
       });
     },
-    play : function(){
-      var rock = $('.rock')
-      rock.html('<i class="fas fa-hand-rock"></i>')
-      var paper = $('.paper')
-      paper.html('<i class="fas fa-hand-paper"></i>')
-      var scissors = $('.scissors')
-      scissors.html('<i class="fas fa-hand-scissors"></i>')
-      var choice1;
-      var choice2;
-      if (turn = 1){
-        $('.option').on('click', function(){
-          choice1 = $(this).attr('data-id');
-          database.ref('players').child('one').update({
-            choice: choice1
-          })
-          database.ref().update({
-            turn : 2
-          })
-        });
-      }
-      if(turn = 2){
-        choice2 = $(this).attr('data-id');
-          database.ref('players').child('two').update({
-            choice: choice2
-          })
-          database.ref().update({
-            turn : 1
-        })
-      }
-
-      
-
-    },
     run : function(){
       database.ref().on("value",function(snapshot){
         if (snapshot.child('players').exists()){
           console.log(snapshot.val().players.one.name)
-          name1 = snapshot.val().players.one.name;
-          wins1 = snapshot.val().players.one.wins;
-          losses1 = snapshot.val().players.one.losses;
-          $('.name-one').text(name1);
-          $('.win-loss-1').text("Wins: " + wins1 + " || Losses: " + losses1);
+          game.variables.name1 = snapshot.val().players.one.name;
+          game.variables.wins1 = snapshot.val().players.one.wins;
+          game.variables.losses1 = snapshot.val().players.one.losses;
+          $('.name-one').text(game.variables.name1);
+          $('.win-loss-1').text("Wins: " + game.variables.wins1 + " || Losses: " + game.variables.losses1);
         }
         if (snapshot.child('players').child('two').exists()){
           console.log(snapshot.val().players.two.name)          
-          name2 = snapshot.val().players.two.name;
-          wins2 = snapshot.val().players.two.wins;
-          losses2 = snapshot.val().players.two.losses;
-          $('.name-two').text(name2);
-          $('.win-loss-2').text("Wins: " + wins2 + " || Losses: " + losses2);
-          game.functions.play();
+          game.variables.name2 = snapshot.val().players.two.name;
+          game.variables.wins2 = snapshot.val().players.two.wins;
+          game.variables.losses2 = snapshot.val().players.two.losses;
+          $('.name-two').text(game.variables.name2);
+          $('.win-loss-2').text("Wins: " + game.variables.wins2 + " || Losses: " + game.variables.losses2);
           $('.player-inputs').hide();
-          turn = snapshot.val().turn;
+
+          var turn = snapshot.val().turn; 
+          $('.whos-turn').text('Player '+ turn.toString() + "'s turn!");
+            
           console.log("turn: " + turn);
+
+          var rock = $('.rock');
+          rock.html('<i class="fas fa-hand-rock"></i>');
+          var paper = $('.paper');
+          paper.html('<i class="fas fa-hand-paper"></i>');
+          var scissors = $('.scissors');
+          scissors.html('<i class="fas fa-hand-scissors"></i>');
+
+          
+          if(turn === 1){
+            $('.option1').on('click', function(){
+              game.variables.choice1 = $(this).attr('data-id');
+              database.ref('players').child('one').update({
+                choice: game.variables.choice1
+              })
+              database.ref().update({
+                turn : 2
+              })
+              $('.option1').off("click");                            
+            })
+          }
+
+          if(turn === 2){
+            $('.option2').on('click', function(){
+              game.variables.choice2 = $(this).attr('data-id');
+              database.ref('players').child('two').update({
+                choice: game.variables.choice2
+              })
+              database.ref().update({
+                turn : 1
+              })    
+              $('.option2').off("click");              
+            })
+          }
+
+          if(game.variables.choice1 !== "" && game.variables.choice2 !== ""){
+            game.functions.compare();
+          }
+
+        }  
+    }, function(errorObject) {
+        console.log("Errors handled: " + errorObject.code);
+      });
+    },
+    compare : function(){
+      if (game.variables.choice1 === 'rock'){
+        if (game.variables.choice2 === 'paper'){
+          console.log('hehe')
+          game.variables.choice1 = "";
+          game.variables.choice2 = "";
+          database.ref('players').child('one').update({
+            choice : "",
+            losses : game.variables.losses1 + 1
+          })
+          database.ref('players').child('two').update({
+            choice: "",
+            wins : game.variables.wins2 + 1
+          })
+        } else if (game.variables.choice2 === 'scissors') {
+          game.variables.choice1 = "";
+          game.variables.choice2 = "";
+          database.ref('players').child('one').update({
+            choice : "",            
+            wins : game.variables.wins1 + 1
+          })
+          database.ref('players').child('two').update({
+            choice : "",            
+            losses : game.variables.losses2 + 1
+          })
+        } else {
+          game.variables.choice1 = "";
+          game.variables.choice2 = "";
+          console.log('tie')
+          $('.announcement').html('<h1>Tie!</h1>')          
+        
+        }
+
+      } else if (game.variables.choice1 === 'paper'){
+        if (game.variables.choice2 === 'scissors'){
+          game.variables.choice1 = "";
+          game.variables.choice2 = "";
+          database.ref('players').child('one').update({
+            choice : "",            
+            losses : game.variables.losses1 + 1
+          })
+          database.ref('players').child('two').update({
+            choice : "",            
+            wins : game.variables.wins2 + 1
+          })
+          
+        } else if (game.variables.choice2 === 'rock') {
+          game.variables.choice1 = "";
+          game.variables.choice2 = "";
+          database.ref('players').child('one').update({
+            choice : "",            
+            wins : game.variables.wins1 + 1
+          })
+          database.ref('players').child('two').update({
+            choice : "",            
+            losses : game.variables.losses2 + 1
+          })
+          
+        } else {
+          game.variables.choice1 = "";
+          game.variables.choice2 = "";
+          console.log('tie')
+          $('.announcement').html('<h1>Tie!</h1>')
           
         }
         
-      }, function(errorObject) {
-        console.log("Errors handled: " + errorObject.code);
-      });
+      } else if (game.variables.choice1 === 'scissors'){
+        if (game.variables.choice2 === 'rock'){
+          game.variables.choice1 = "";
+          game.variables.choice2 = "";
+          database.ref('players').child('one').update({
+            choice : "",            
+            losses : game.variables.losses1 + 1
+          })
+          database.ref('players').child('two').update({
+            choice : "",            
+            wins : game.variables.wins2 + 1
+          })
+
+        } else if (game.variables.choice2 === 'paper') {
+          game.variables.choice1 = "";
+          game.variables.choice2 = "";
+          database.ref('players').child('one').update({
+            choice : "",            
+            wins : game.variables.wins1 + 1
+          })
+          database.ref('players').child('two').update({
+            choice : "",            
+            losses : game.variables.losses2 + 1
+          })
+          
+
+        } else {
+          game.variables.choice1 = "";
+          game.variables.choice2 = "";
+          console.log('tie');
+          $('.announcement').html('<h1>Tie!</h1>')
+          
+        }
+        
+      }
     },
     chat : function(){
       $('#chat-submit').on("click",function(){
@@ -145,37 +254,8 @@ var game = {
     }
   }
 }
-
 $(document).ready(function(){
   game.functions.run();
   game.functions.init();
   game.functions.chat();
-  console.log(database.ref('turn').turn);
-  // database.ref().update({
-  //   chat: "",
-  // })
-
-  
-  
-  
-
-
-
-
-
-
 })
-
-/* 
-Take in first user input and make them player one and give them a loss count, name, and win in firebase and display.
-Take in first user input and make them player two and give them a loss count, name, and win in firebase and display.
-Get rid of the enter name box and button.
-Let them choose rock paper or scissors and what ever they choose is only displayed to them, not to the other user. 
-Once both players have choosen a answer, compare them, and Diplay who wins. 
-After 3 seconds, empty that winner display and adjust win count accordingly.
-
-
-CHAT:
-update the text box with what ever input is submitted from the text section and update firebase and display the result from firebase.
-*/
-
