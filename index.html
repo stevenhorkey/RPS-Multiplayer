@@ -7,6 +7,7 @@
     <title>RPS Multiplayer</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <!-- Fonts -->  
+    <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
     <!-- CSS -->
     <link rel="stylesheet" href="assets/css/style.css">
     <!-- Scroll -->
@@ -24,16 +25,18 @@
     <div class="row header">
         <div class="container">
             <div>
-                <!-- <h1>Rock Paper Scissors</h1> -->
-                <img id="title-pic" src="http://static1.squarespace.com/static/595543f6b11be1695b0fdb29/t/59555414cd0f68572370bb64/1498764324553/DFP-RockPaperScissors-Black.png?format=1000w">
+                <h1>R<i class="far fa-hand-rock"></i>ck P<i class="far fa-hand-paper"></i>per Sciss<i class="far fa-hand-scissors"></i>rs</h1>
+                <!-- <img id="title-pic" src="http://static1.squarespace.com/static/595543f6b11be1695b0fdb29/t/59555414cd0f68572370bb64/1498764324553/DFP-RockPaperScissors-Black.png?format=1000w"> -->
             </div>
         </div>
     </div>
 
     <div class="text-display row">
         <div class="container">
-            <input type="text" id="name-input">
-            <button id="name-submit" class="btn btn-standard">Submit</button>
+            <div class="player-inputs">
+                <input type="text" id="name-input">
+                <button id="name-submit" class="btn btn-standard">Submit</button>
+            </div>
             <div class="announcment">Testing</div>
             <div class="whos-turn">Your turn</div>
         </div>
@@ -42,21 +45,21 @@
     <div class="players row">
         <div class="container">
             <div class="boxes player-1 col-md-4">
-                <div class="name">Waiting for Player One</div>
-                <div class="rock"></div>
-                <div class="paper"></div>
-                <div class="scissors"></div>
-                <div class="win-loss"></div>
+                <div class="name name-one">Waiting for Player 1</div>
+                <span class="option rock" data-id='rock'></span>
+                <span class="option paper" data-id='paper'></span>
+                <span class="option scissors" data-id='scissors'></span>
+                <div class="win-loss-1"></div>
             </div>
             <div class="boxes result col-md-4">
 
             </div>
             <div class="boxes player-2 col-md-4">
-                <div class="name">Waiting for Player Two</div>
-                <div class="rock"></div>
-                <div class="paper"></div>
-                <div class="scissors"></div>
-                <div class="win-loss"></div>
+                <div class="name name-two">Waiting for Player 2</div>
+                <span class="option rock" data-id='rock'></span>
+                <span class="option paper" data-id='paper'></span>
+                <span class="option scissors" data-id='scissors'></span>
+                <div class="win-loss-2"></div>
             </div>
         </div>
     </div>
@@ -66,7 +69,8 @@
             <div>
                 <div class="chat-box"></div>
                 <input class="chat-input" type="text" placeholder="Message">
-                <button class="chat-submit btn btn-standard" >Submit</button>
+                <button id="chat-submit" class="btn btn-standard" >Submit</button>
+                <button id="clear-all" class="btn btn-standard" >Clear Game</button>
             </div>
         </div>
     </div>

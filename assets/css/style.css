@@ -1,6 +1,6 @@
 body{
     text-align: center;
-    background-color: #C6535F;
+    background-color: rgb(160, 230, 96);
 }
 
 .container{
@@ -26,20 +26,28 @@ body{
     margin: 20px 0;
 }
 .player-1{
-    border-radius: 200px;
+    /* background: url('../images/fist.png'); */
+    background-position: center;
+    background-size: cover;
 }
 .result{
     border-radius: 3px;
 }
 .player-2{
-    border-radius: 200px;    
+    /* background: url('../images/fist-right.png'); */
+    background-position: center;
+    background-size: cover;
+    
 }
 .boxes{
     height: 300px;
     border: black 1px solid;
     float: left;
 }
-
+.option{
+    font-size: 40px;
+    margin: 10px;
+}
 /* Chat */
 .chat-box{
     width: 100%;
@@ -48,6 +56,7 @@ body{
     margin: 20px 0;
     background-color: antiquewhite;
     border-radius: 5px;
+    overflow-y: scroll;
 }
 .chat-input{
     border-radius: 5px;
