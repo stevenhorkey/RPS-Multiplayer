@@ -41,6 +41,10 @@ var game = {
               }
             },
           });
+          $('.rock1').html('<i class="fas fa-hand-rock"></i>');
+          $('.paper1').html('<i class="fas fa-hand-paper"></i>');
+          $('.scissors1').html('<i class="fas fa-hand-scissors"></i>');
+          
         } else if (game.variables.name2 === "") {
           game.variables.name2 = name;
           $('#name-input').hide();
@@ -56,7 +60,9 @@ var game = {
           database.ref().update({
             turn : 1,
           })
-    
+          $('.rock2').html('<i class="fas fa-hand-rock"></i>');
+          $('.paper2').html('<i class="fas fa-hand-paper"></i>');
+          $('.scissors2').html('<i class="fas fa-hand-scissors"></i>');
         }
         $('#name-input').val("");
       });
@@ -79,36 +85,32 @@ var game = {
           $('.name-two').text(game.variables.name2);
           $('.win-loss-2').text("Wins: " + game.variables.wins2 + " || Losses: " + game.variables.losses2);
           $('.player-inputs').hide();
+          }
 
-          var turn = snapshot.val().turn; 
-          $('.whos-turn').text('Player '+ turn.toString() + "'s turn!");
+          if (snapshot.child('players').child('one').exists() && snapshot.child('players').child('two').exists()){
+            var turn = snapshot.val().turn; 
+            $('.whos-turn').text('Player ' + turn.toString() + "'s turn!");
             
           console.log("turn: " + turn);
 
-          var rock = $('.rock');
-          rock.html('<i class="fas fa-hand-rock"></i>');
-          var paper = $('.paper');
-          paper.html('<i class="fas fa-hand-paper"></i>');
-          var scissors = $('.scissors');
-          scissors.html('<i class="fas fa-hand-scissors"></i>');
-
-          
           if(turn === 1){
             $('.option1').on('click', function(){
               game.variables.choice1 = $(this).attr('data-id');
+              console.log(game.variables.choice1)     
               database.ref('players').child('one').update({
                 choice: game.variables.choice1
               })
               database.ref().update({
                 turn : 2
               })
-              $('.option1').off("click");                            
+              $('.option1').off("click");  
             })
           }
 
           if(turn === 2){
             $('.option2').on('click', function(){
               game.variables.choice2 = $(this).attr('data-id');
+              console.log(game.variables.choice2)
               database.ref('players').child('two').update({
                 choice: game.variables.choice2
               })
@@ -118,11 +120,12 @@ var game = {
               $('.option2').off("click");              
             })
           }
+          game.variables.choice1 = snapshot.val().players.one.choice
+          game.variables.choice2 = snapshot.val().players.two.choice
 
-          if(game.variables.choice1 !== "" && game.variables.choice2 !== ""){
+          if(snapshot.val().players.one.choice !== "" && snapshot.val().players.two.choice !== ""){
             game.functions.compare();
           }
-
         }  
     }, function(errorObject) {
         console.log("Errors handled: " + errorObject.code);
@@ -131,7 +134,6 @@ var game = {
     compare : function(){
       if (game.variables.choice1 === 'rock'){
         if (game.variables.choice2 === 'paper'){
-          console.log('hehe')
           game.variables.choice1 = "";
           game.variables.choice2 = "";
           database.ref('players').child('one').update({
@@ -142,6 +144,8 @@ var game = {
             choice: "",
             wins : game.variables.wins2 + 1
           })
+          $('.announcement').text('Player 2 Wins');
+          
         } else if (game.variables.choice2 === 'scissors') {
           game.variables.choice1 = "";
           game.variables.choice2 = "";
@@ -153,10 +157,17 @@ var game = {
             choice : "",            
             losses : game.variables.losses2 + 1
           })
+          $('.announcement').text('Player 1 Wins');
+          
         } else {
           game.variables.choice1 = "";
           game.variables.choice2 = "";
-          console.log('tie')
+          database.ref('players').child('one').update({
+            choice : "",            
+          })
+          database.ref('players').child('two').update({
+            choice : "",            
+          })
           $('.announcement').html('<h1>Tie!</h1>')          
         
         }
@@ -173,7 +184,7 @@ var game = {
             choice : "",            
             wins : game.variables.wins2 + 1
           })
-          
+          $('.announcement').text('Player 2 Wins');        
         } else if (game.variables.choice2 === 'rock') {
           game.variables.choice1 = "";
           game.variables.choice2 = "";
@@ -185,11 +196,20 @@ var game = {
             choice : "",            
             losses : game.variables.losses2 + 1
           })
+          $('.announcement').text('Player 1 Wins');
+          
           
         } else {
           game.variables.choice1 = "";
           game.variables.choice2 = "";
-          console.log('tie')
+          database.ref('players').child('one').update({
+            choice : "",            
+          })
+          database.ref('players').child('two').update({
+            choice : "",            
+          })
+          game.variables.choice1 = "";
+          game.variables.choice2 = "";
           $('.announcement').html('<h1>Tie!</h1>')
           
         }
@@ -206,7 +226,7 @@ var game = {
             choice : "",            
             wins : game.variables.wins2 + 1
           })
-
+          $('.announcement').text('Player 2 Wins');          
         } else if (game.variables.choice2 === 'paper') {
           game.variables.choice1 = "";
           game.variables.choice2 = "";
@@ -218,17 +238,30 @@ var game = {
             choice : "",            
             losses : game.variables.losses2 + 1
           })
+          $('.announcement').text('Player 1 Wins');
           
 
         } else {
           game.variables.choice1 = "";
           game.variables.choice2 = "";
-          console.log('tie');
+          database.ref('players').child('one').update({
+            choice : "",            
+          })
+          database.ref('players').child('two').update({
+            choice : "",            
+          })
+          game.variables.choice1 = "";
+          game.variables.choice2 = "";
           $('.announcement').html('<h1>Tie!</h1>')
           
         }
         
       }
+    },
+    disconnect : function(){
+      database.ref().on("value",function(snapshot){
+        database.ref().onDisconnect().cancel();
+      });
     },
     chat : function(){
       $('#chat-submit').on("click",function(){
@@ -241,7 +274,6 @@ var game = {
         }
       });
       database.ref('chat').on("child_added",function(childSnapshot){
-        console.log(childSnapshot.val().message + "TEST")
         var message = childSnapshot.val().message;
         var row = $('<div></div>').text(message);
         $('.chat-box').append(row)
