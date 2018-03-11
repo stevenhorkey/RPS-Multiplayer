@@ -5,6 +5,7 @@ body{
     background-position: center;
     background-repeat: no-repeat;
     min-height: 100vh;
+    font-size: 22px;
 }
 
 .container{
@@ -48,8 +49,9 @@ body{
     border: black 1px solid;
     float: left;
 }
-.option{
-    font-size: 40px;
+.option1,
+.option2{
+    font-size: 50px;
     margin: 10px;
 }
 /* Chat */
@@ -61,11 +63,13 @@ body{
     background-color: white;
     border-radius: 5px;
     overflow-y: scroll;
+    font-size: 18px;
 }
 .chat-input{
     border-radius: 5px;
     width: 90%;
     background-color: white;
+    font-size: 18px;
     
 }
 .chat-submit{
