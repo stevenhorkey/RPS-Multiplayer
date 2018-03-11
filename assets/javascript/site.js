@@ -260,8 +260,12 @@ var game = {
     },
     disconnect : function(){
       database.ref().on("value",function(snapshot){
-        database.ref().onDisconnect().cancel();
+        database.ref().onDisconnect().set({
+        
+        });
+        
       });
+
     },
     chat : function(){
       $('#chat-submit').on("click",function(){
@@ -290,4 +294,5 @@ $(document).ready(function(){
   game.functions.run();
   game.functions.init();
   game.functions.chat();
+  game.functions.disconnect();
 })
