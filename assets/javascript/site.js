@@ -68,8 +68,9 @@ var game = {
       });
     },
     run : function(){
+      $('.win-loss-2').hide();
       database.ref().on("value",function(snapshot){
-        if (snapshot.child('players').exists()){
+        if (snapshot.child('players').child('one').exists()){
           console.log(snapshot.val().players.one.name)
           game.variables.name1 = snapshot.val().players.one.name;
           game.variables.wins1 = snapshot.val().players.one.wins;
@@ -78,6 +79,7 @@ var game = {
           $('.win-loss-1').text("Wins: " + game.variables.wins1 + " || Losses: " + game.variables.losses1);
         }
         if (snapshot.child('players').child('two').exists()){
+          $('.win-loss-2').show();
           console.log(snapshot.val().players.two.name)          
           game.variables.name2 = snapshot.val().players.two.name;
           game.variables.wins2 = snapshot.val().players.two.wins;
@@ -85,6 +87,12 @@ var game = {
           $('.name-two').text(game.variables.name2);
           $('.win-loss-2').text("Wins: " + game.variables.wins2 + " || Losses: " + game.variables.losses2);
           $('.player-inputs').hide();
+          } else {
+            $('.win-loss-2').text("Other player left - Click to Restart.")
+            $('.win-loss-2').append('<button class="btn btn-standard restart">Play Again</button>');
+            $('.restart').on("click", function(){
+              location.reload();
+            });
           }
 
           if (snapshot.child('players').child('one').exists() && snapshot.child('players').child('two').exists()){
@@ -263,6 +271,7 @@ var game = {
         database.ref().onDisconnect().set({
         
         });
+        console.log(database.ref().onDisconnect())
         
       });
 
